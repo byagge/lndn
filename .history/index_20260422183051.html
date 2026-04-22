@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ARIX</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+          },
+          colors: {
+            paper: '#f4f4f2',
+            ink: '#0b0b0b',
+            line: '#e7e7e4',
+            muted: '#6b6b6b',
+            soft: '#f0f0ed'
+          },
+          boxShadow: {
+            soft: '0 10px 30px rgba(0,0,0,.06)'
+          },
+          borderRadius: {
+            mega: '2rem'
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    html { scroll-behavior: smooth; }
+    body { font-family: Inter, ui-sans-serif, system-ui, sans-serif; }
+    .typed-cursor {
+      display: inline-block;
+      width: 0.08em;
+      background: currentColor;
+      margin-left: 0.08em;
+      animation: blink 1s step-end infinite;
+      vertical-align: baseline;
+    }
+    @keyframes blink {
+      0%, 45% { opacity: 1; }
+      50%, 100% { opacity: 0; }
+    }
+  </style>
+</head>
+<body class="bg-paper text-ink antialiased selection:bg-black selection:text-white">
+  <div class="min-h-screen">
+    <header class="px-6 md:px-10">
+      <div class="mx-auto flex max-w-[1380px] items-center justify-between py-6 md:py-8">
+        <a href="#top" class="flex items-center gap-3">
+          <img src="media/logo.png" alt="ARIX Logo" class="h-11 w-11 rounded-full bg-black object-cover" />
+          <div class="text-3xl font-semibold tracking-tight">ARIX</div>
+   
+   
+        </a>
+
+        <nav class="hidden items-center gap-10 text-[18px] font-medium md:flex">
+          <a href="#about" class="transition-opacity hover:opacity-60">About</a>
+          <a href="https://t.me/arxixx" target="_blank" rel="noopener noreferrer" class="transition-opacity hover:opacity-60">Telegram</a>
+          <a href="https://t.me/+Wg5Di_ijp2U5YWYy" target="_blank" rel="noopener noreferrer" class="transition-opacity hover:opacity-60">Blog</a>
+        </nav>
+
+        <a
+          href="https://t.me/arxixx"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="inline-flex items-center justify-center rounded-full bg-black px-6 py-3 text-base font-semibold text-white transition-colors duration-200 hover:opacity-80"
+        >
+          Telegram
+        </a>
+ 
+      </div>
+    </header>
+
+    <main id="top" class="px-6 md:px-10">
+      <section class="mx-auto flex max-w-[1380px] flex-col items-center pt-10 text-center md:pt-20">
+        <div class="max-w-[980px]">
+          <h1 class="text-[56px] font-semibold leading-[0.95] tracking-[-0.05em] sm:text-[78px] md:text-[112px] lg:text-[128px]">
+            I build <br />
+            <span class="font-medium">
+              <span id="typed-word">software</span><span class="typed-cursor" aria-hidden="true"></span>
+            </span>
+          </h1>
+          <p class="mx-auto mt-8 max-w-[860px] text-[23px] leading-[1.35] text-[#4d4d4d] md:text-[28px]">
+            From concept to launch
+          </p>
+
+          <div class="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
+            <a
+              href="https://t.me/arxixx"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="inline-flex min-w-[180px] items-center justify-center rounded-full bg-black px-8 py-4 text-lg font-semibold text-white transition-colors duration-200 hover:opacity-80"
+            >
+              @arxixx
+            </a>
+            <a
+              href="https://t.me/+Wg5Di_ijp2U5YWYy"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="inline-flex min-w-[180px] items-center justify-center rounded-full bg-[#ececeb] px-8 py-4 text-lg font-semibold text-black transition-colors duration-200 hover:bg-[#e2e2df]"
+            >
+              Telegram Blog
+            </a>
+          </div>
+        </div>
+      </section>
+
+      <section id="about" class="mx-auto max-w-[1380px] py-14 md:py-24">
+        <div class="overflow-hidden rounded-[42px] bg-black text-white shadow-soft">
+          <div class="grid gap-0 md:grid-cols-[1.2fr_0.8fr]">
+            <div class="px-7 py-10 sm:px-10 sm:py-12 md:px-14 md:py-16">
+              <div class="text-sm uppercase tracking-[0.24em] text-white/45">ARIX</div>
+              <h2 class="mt-4 max-w-[720px] text-[34px] font-semibold leading-[1.02] tracking-[-0.04em] sm:text-[48px] md:text-[72px]">
+                Minimal site.<br />
+                Direct contact.
+              </h2>
+              <p class="mt-6 max-w-[620px] text-lg leading-8 text-white/68 md:text-[22px] md:leading-9">
+                Без лишнего. Telegram и блог.
+              </p>
+            </div>
+
+            <div class="border-t border-white/10 px-7 py-8 sm:px-10 md:border-l md:border-t-0 md:px-12 md:py-16">
+              <div class="space-y-4">
+                <a
+                  href="https://t.me/arxixx"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="group flex items-center justify-between rounded-full bg-white px-6 py-5 text-black transition-colors duration-200"
+                >
+                  <span class="text-xl font-semibold">Telegram</span>
+                  <span class="text-lg text-black/55 transition group-hover:text-black">@arxixx</span>
+                </a>
+
+                <a
+                  href="https://t.me/+Wg5Di_ijp2U5YWYy"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="group flex items-center justify-between rounded-full bg-[#171717] px-6 py-5 text-white ring-1 ring-white/10 transition-colors duration-200"
+                >
+                  <span class="text-xl font-semibold">Blog</span>
+                  <span class="text-lg text-white/55 transition group-hover:text-white">Open</span>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    document.querySelectorAll('a[href^="#"]').forEach(link => {
+      link.addEventListener('click', event => {
+        const target = document.querySelector(link.getAttribute('href'));
+        if (!target) return;
+        event.preventDefault();
+        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      });
+    });
+
+    const typedWord = document.getElementById('typed-word');
+    const words = ['software', 'sites', 'bots', 'apps', 'systems', 'everything.'];
+    let wordIndex = 0;
+    let charIndex = words[0].length;
+    let isDeleting = false;
+
+    function typeNextFrame() {
+      const currentWord = words[wordIndex];
+
+      if (isDeleting) {
+        charIndex -= 1;
+      } else {
+        charIndex += 1;
+      }
+
+      typedWord.textContent = currentWord.slice(0, Math.max(0, charIndex));
+
+      let delay = isDeleting ? 80 : 140;
+
+      if (!isDeleting && charIndex >= currentWord.length) {
+        isDeleting = true;
+        delay = 1100;
+      } else if (isDeleting && charIndex <= 0) {
+        isDeleting = false;
+        wordIndex = (wordIndex + 1) % words.length;
+        delay = 320;
+      }
+
+      setTimeout(typeNextFrame, delay);
+    }
+
+    typedWord.textContent = words[0];
+    setTimeout(() => {
+      isDeleting = true;
+      typeNextFrame();
+    }, 1100);
+  </script>
+</body>
+</html>
