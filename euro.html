@@ -1,0 +1,1093 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Attio-style Landing Page Clone</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'system-ui', 'sans-serif'],
+            serif: ['Instrument Serif', 'Georgia', 'serif'],
+          },
+          boxShadow: {
+            soft: '0 10px 35px rgba(15, 23, 42, 0.06)',
+            panel: '0 30px 80px rgba(17, 24, 39, 0.08)',
+            float: '0 18px 55px rgba(15, 23, 42, 0.12)',
+          },
+          keyframes: {
+            floaty: {
+              '0%, 100%': { transform: 'translateY(0px)' },
+              '50%': { transform: 'translateY(-8px)' },
+            },
+            marquee: {
+              '0%': { transform: 'translateX(0)' },
+              '100%': { transform: 'translateX(-50%)' },
+            },
+            pulseGlow: {
+              '0%,100%': { boxShadow: '0 0 0 0 rgba(17,17,17,.08)' },
+              '50%': { boxShadow: '0 0 0 12px rgba(17,17,17,0)' },
+            },
+            shimmer: {
+              '0%': { backgroundPosition: '-200% 0' },
+              '100%': { backgroundPosition: '200% 0' },
+            }
+          },
+          animation: {
+            floaty: 'floaty 6s ease-in-out infinite',
+            marquee: 'marquee 26s linear infinite',
+            pulseGlow: 'pulseGlow 2.2s infinite',
+            shimmer: 'shimmer 6s linear infinite',
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    :root {
+      --bg: #f5f4f1;
+      --bg-2: #eeece6;
+      --ink: #111111;
+      --muted: #636363;
+      --line: rgba(17,17,17,.08);
+      --card: rgba(255,255,255,.78);
+      --dark: #050505;
+    }
+    * { -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility; }
+    html { scroll-behavior: smooth; }
+    body {
+      background:
+        radial-gradient(circle at top, rgba(255,255,255,.95), rgba(255,255,255,0) 25%),
+        linear-gradient(180deg, #f7f6f2 0%, #f2f0ea 45%, #f4f3ef 100%);
+      color: var(--ink);
+      overflow-x: hidden;
+    }
+    .noise::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      opacity: .04;
+      background-image:
+        radial-gradient(circle at 20% 20%, #000 0.6px, transparent 0.7px),
+        radial-gradient(circle at 80% 35%, #000 0.6px, transparent 0.7px),
+        radial-gradient(circle at 55% 80%, #000 0.6px, transparent 0.7px);
+      background-size: 22px 22px, 26px 26px, 30px 30px;
+      mix-blend-mode: multiply;
+    }
+    .grid-fade {
+      background-image:
+        linear-gradient(rgba(17,17,17,.06) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(17,17,17,.06) 1px, transparent 1px);
+      background-size: 28px 28px;
+      mask-image: radial-gradient(circle at center, rgba(0,0,0,1), rgba(0,0,0,.4) 55%, transparent 82%);
+      -webkit-mask-image: radial-gradient(circle at center, rgba(0,0,0,1), rgba(0,0,0,.4) 55%, transparent 82%);
+    }
+    .glass {
+      background: rgba(255,255,255,.72);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      border: 1px solid rgba(255,255,255,.7);
+    }
+    .line-card {
+      border: 1px solid var(--line);
+      background: linear-gradient(180deg, rgba(255,255,255,.82), rgba(255,255,255,.6));
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+    }
+    .eyebrow {
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      font-size: .72rem;
+      color: #646464;
+    }
+    .section-title {
+      font-size: clamp(2rem, 4vw, 4.2rem);
+      line-height: .95;
+      letter-spacing: -.06em;
+    }
+    .hero-title {
+      font-size: clamp(3.4rem, 8vw, 7.5rem);
+      line-height: .9;
+      letter-spacing: -.09em;
+    }
+    .tilt {
+      transform-style: preserve-3d;
+      transition: transform .15s ease-out;
+    }
+    .reveal {
+      opacity: 0;
+      transform: translateY(28px);
+      transition: opacity .8s ease, transform .8s cubic-bezier(.2,.8,.2,1);
+    }
+    .reveal.is-visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .marquee-track { width: max-content; }
+    .text-gradient {
+      background: linear-gradient(90deg, #111, #555, #111);
+      background-size: 200% 100%;
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+    .hero-dashboard {
+      perspective: 1800px;
+      transform-style: preserve-3d;
+    }
+    .hero-dashboard-inner {
+      transform: rotateX(10deg) rotateY(-6deg);
+      box-shadow: 0 35px 120px rgba(0,0,0,.12);
+    }
+    .chart-grid line { stroke: rgba(17,17,17,.08); stroke-width: 1; }
+    .stat-pill {
+      background: linear-gradient(180deg, rgba(255,255,255,.95), rgba(255,255,255,.75));
+      border: 1px solid rgba(17,17,17,.08);
+      box-shadow: 0 8px 22px rgba(0,0,0,.04);
+    }
+    .btn-dark {
+      background: #111;
+      color: white;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.16), 0 10px 30px rgba(0,0,0,.12);
+    }
+    .btn-dark:hover { background: #090909; }
+    .btn-light {
+      background: rgba(255,255,255,.85);
+      border: 1px solid rgba(17,17,17,.08);
+      box-shadow: 0 10px 24px rgba(0,0,0,.04);
+    }
+    .hover-lift { transition: transform .35s ease, box-shadow .35s ease, border-color .35s ease; }
+    .hover-lift:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 18px 40px rgba(17,24,39,.08);
+      border-color: rgba(17,17,17,.15);
+    }
+    .feature-tab.active {
+      background: #111;
+      color: #fff;
+      border-color: #111;
+    }
+    .footer-link { color: rgba(255,255,255,.68); }
+    .footer-link:hover { color: white; }
+    .sticky-top-blur {
+      background: rgba(247,246,242,.65);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+    }
+    .shimmer-bg {
+      background: linear-gradient(90deg, rgba(0,0,0,.04), rgba(0,0,0,.08), rgba(0,0,0,.04));
+      background-size: 200% 100%;
+    }
+  </style>
+</head>
+<body class="font-sans selection:bg-black selection:text-white">
+  <div class="fixed inset-0 -z-20">
+    <div class="absolute inset-0 grid-fade"></div>
+    <div class="absolute -top-32 left-1/2 h-[34rem] w-[34rem] -translate-x-1/2 rounded-full bg-white/70 blur-3xl"></div>
+    <div class="absolute top-[22rem] -left-24 h-80 w-80 rounded-full bg-stone-200/80 blur-3xl"></div>
+    <div class="absolute top-[56rem] right-0 h-[28rem] w-[28rem] rounded-full bg-white/70 blur-3xl"></div>
+  </div>
+
+  <div id="cursor" class="pointer-events-none fixed left-0 top-0 z-[100] hidden h-6 w-6 -translate-x-1/2 -translate-y-1/2 rounded-full border border-black/15 bg-white/30 backdrop-blur-xl md:block"></div>
+
+  <header id="siteHeader" class="sticky top-0 z-50 border-b border-black/5 sticky-top-blur transition-all duration-300">
+    <div class="mx-auto flex max-w-[1380px] items-center justify-between px-4 py-4 md:px-6 lg:px-8">
+      <div class="flex items-center gap-10">
+        <a href="#" class="group flex items-center gap-2">
+          <div class="grid h-8 w-8 place-items-center rounded-full border border-black/10 bg-white shadow-sm transition-transform duration-300 group-hover:rotate-12">◔</div>
+          <span class="text-sm font-semibold tracking-[-0.03em]">attio</span>
+        </a>
+        <nav class="hidden items-center gap-7 lg:flex">
+          <a class="text-sm text-black/70 transition hover:text-black" href="#platform">Platform</a>
+          <a class="text-sm text-black/70 transition hover:text-black" href="#customers">Customers</a>
+          <a class="text-sm text-black/70 transition hover:text-black" href="#pricing">Pricing</a>
+          <a class="text-sm text-black/70 transition hover:text-black" href="#resources">Resources</a>
+        </nav>
+      </div>
+      <div class="flex items-center gap-3">
+        <a href="#" class="hidden text-sm text-black/70 transition hover:text-black sm:block">Sign in</a>
+        <a href="#trial" class="magnetic btn-dark rounded-full px-4 py-2 text-sm font-medium">Start for free</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="relative noise">
+    <section class="relative overflow-hidden px-4 pb-16 pt-10 md:px-6 md:pt-14 lg:px-8 lg:pb-24">
+      <div class="mx-auto max-w-[1380px]">
+        <div class="mb-10 flex justify-center reveal">
+          <div class="glass inline-flex items-center gap-3 rounded-full px-4 py-2 text-xs text-black/70 shadow-soft">
+            <span class="inline-flex h-2.5 w-2.5 animate-pulseGlow rounded-full bg-black"></span>
+            <span>Meet the Developer Platform, now with MCP</span>
+          </div>
+        </div>
+
+        <div class="mx-auto max-w-[980px] text-center reveal">
+          <p class="mb-6 text-sm text-black/50">“When I first opened Attio, I instantly got the feeling this was the next generation of CRM.” — Margaret Shen</p>
+          <h1 class="hero-title mb-6 font-semibold tracking-[-0.1em] text-black">
+            Customer<br>
+            relationship <span class="font-serif italic font-normal">magic.</span>
+          </h1>
+          <p class="mx-auto mb-8 max-w-xl text-lg leading-8 text-black/60">Attio is the AI CRM for GTM.</p>
+          <div class="flex flex-col items-center justify-center gap-3 sm:flex-row">
+            <a href="#trial" class="magnetic btn-dark rounded-full px-6 py-3 text-sm font-medium">Start for free</a>
+            <a href="#" class="magnetic btn-light rounded-full px-6 py-3 text-sm font-medium text-black">Talk to sales</a>
+          </div>
+        </div>
+
+        <div class="mt-14 flex justify-center reveal">
+          <div class="glass inline-flex flex-wrap items-center justify-center gap-2 rounded-full p-1 shadow-soft">
+            <button class="dashboard-switch active rounded-full bg-black px-4 py-2 text-sm font-medium text-white" data-dashboard="ask">Ask Attio</button>
+            <button class="dashboard-switch rounded-full px-4 py-2 text-sm font-medium text-black/65" data-dashboard="data">Data model</button>
+            <button class="dashboard-switch rounded-full px-4 py-2 text-sm font-medium text-black/65" data-dashboard="flows">Workflows</button>
+            <button class="dashboard-switch rounded-full px-4 py-2 text-sm font-medium text-black/65" data-dashboard="reporting">Reporting</button>
+          </div>
+        </div>
+
+        <div class="hero-dashboard reveal mt-10">
+          <div id="heroPanel" class="hero-dashboard-inner line-card tilt relative overflow-hidden rounded-[2rem] p-3 md:p-5">
+            <div class="absolute inset-0 bg-gradient-to-br from-white via-white/70 to-stone-100"></div>
+            <div class="relative rounded-[1.4rem] border border-black/6 bg-[#fbfbfa] p-3 md:p-4">
+              <div class="mb-4 flex items-center justify-between rounded-[1.2rem] border border-black/5 bg-white/80 px-4 py-3">
+                <div class="flex items-center gap-3">
+                  <div class="grid h-10 w-10 place-items-center rounded-2xl bg-black text-white">◔</div>
+                  <div>
+                    <div class="text-sm font-semibold">Basepoint</div>
+                    <div class="text-xs text-black/45">Workspace overview</div>
+                  </div>
+                </div>
+                <div class="hidden gap-2 md:flex">
+                  <div class="stat-pill rounded-full px-3 py-2 text-xs text-black/60">⌘K</div>
+                  <div class="stat-pill rounded-full px-3 py-2 text-xs text-black/60">Search</div>
+                </div>
+              </div>
+
+              <div class="grid gap-4 lg:grid-cols-[220px_minmax(0,1fr)_290px]">
+                <aside class="rounded-[1.4rem] border border-black/6 bg-white/85 p-4">
+                  <div class="mb-5 text-xs font-semibold uppercase tracking-[0.22em] text-black/35">Navigation</div>
+                  <div class="space-y-1 text-sm">
+                    <div class="rounded-2xl bg-black px-3 py-2 text-white">Home</div>
+                    <div class="rounded-2xl px-3 py-2 text-black/65">Notifications</div>
+                    <div class="rounded-2xl px-3 py-2 text-black/65">Tasks</div>
+                    <div class="rounded-2xl px-3 py-2 text-black/65">Notes</div>
+                    <div class="rounded-2xl px-3 py-2 text-black/65">Emails</div>
+                    <div class="rounded-2xl px-3 py-2 text-black/65">Calls</div>
+                    <div class="rounded-2xl px-3 py-2 text-black/65">Reports</div>
+                  </div>
+                  <div class="my-5 h-px bg-black/6"></div>
+                  <div class="space-y-1 text-sm text-black/65">
+                    <div class="rounded-2xl px-3 py-2">Automations</div>
+                    <div class="rounded-2xl px-3 py-2">Sequences</div>
+                    <div class="rounded-2xl px-3 py-2">Workflows</div>
+                  </div>
+                </aside>
+
+                <section class="rounded-[1.4rem] border border-black/6 bg-white/90 p-4 md:p-5">
+                  <div class="mb-4 flex flex-wrap items-center justify-between gap-3">
+                    <div>
+                      <div class="text-xs uppercase tracking-[0.22em] text-black/35">Home</div>
+                      <h2 id="heroTitle" class="mt-1 text-2xl font-semibold tracking-[-0.05em]">Good morning, Alex</h2>
+                    </div>
+                    <div class="glass flex items-center gap-2 rounded-full px-3 py-2 text-xs text-black/55">
+                      <span class="inline-flex h-2 w-2 rounded-full bg-emerald-500"></span>
+                      Live sync active
+                    </div>
+                  </div>
+
+                  <div id="heroSearch" class="mb-4 rounded-[1.2rem] border border-black/6 bg-[#f7f7f5] p-4">
+                    <div class="mb-3 text-sm font-medium">Ask anything...</div>
+                    <div class="flex flex-wrap gap-2 text-xs">
+                      <span class="rounded-full border border-black/8 bg-white px-3 py-2">Auto</span>
+                      <span class="rounded-full border border-black/8 bg-white px-3 py-2">Prep for next meeting</span>
+                      <span class="rounded-full border border-black/8 bg-white px-3 py-2">Recap last call</span>
+                    </div>
+                  </div>
+
+                  <div id="heroCenterArea" class="grid gap-4 md:grid-cols-[1.3fr_.9fr]">
+                    <div class="rounded-[1.2rem] border border-black/6 bg-[#fbfbfa] p-4">
+                      <div class="mb-4 flex items-center justify-between">
+                        <div class="text-sm font-semibold">Meetings</div>
+                        <div class="text-xs text-black/45">Today, Apr 22</div>
+                      </div>
+                      <div class="space-y-3">
+                        <div class="rounded-2xl border border-black/6 bg-white p-3">
+                          <div class="text-sm font-semibold">Basepoint × Stripe</div>
+                          <div class="mt-1 text-xs text-black/50">10:00 - 11:00 AM</div>
+                        </div>
+                        <div class="rounded-2xl border border-black/6 bg-white p-3">
+                          <div class="text-sm font-semibold">Ashley & Martin</div>
+                          <div class="mt-1 text-xs text-black/50">10:20 - 10:40 AM</div>
+                        </div>
+                        <div class="rounded-2xl border border-black/6 bg-black p-3 text-white">
+                          <div class="text-sm font-semibold">Greenleaf // Basepoint</div>
+                          <div class="mt-1 text-xs text-white/65">2:30 - 3:00 PM</div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="rounded-[1.2rem] border border-black/6 bg-[#fbfbfa] p-4">
+                      <div class="mb-4 flex items-center justify-between">
+                        <div class="text-sm font-semibold">Details</div>
+                        <div class="rounded-full border border-black/8 px-2 py-1 text-[10px] uppercase tracking-[0.18em] text-black/45">Participants 8</div>
+                      </div>
+                      <p class="text-sm leading-6 text-black/60">Demo call with Greenleaf team to help them get the most out of their PRO trial.</p>
+                      <div class="mt-4 rounded-2xl border border-black/6 bg-white p-3 text-sm text-black/55">meet.google.com/psn-zfzb-yaw</div>
+                      <div class="mt-4 flex -space-x-2">
+                        <div class="grid h-10 w-10 place-items-center rounded-full border-2 border-white bg-stone-200 text-xs font-semibold">DP</div>
+                        <div class="grid h-10 w-10 place-items-center rounded-full border-2 border-white bg-zinc-200 text-xs font-semibold">AZ</div>
+                        <div class="grid h-10 w-10 place-items-center rounded-full border-2 border-white bg-stone-300 text-xs font-semibold">MR</div>
+                        <div class="grid h-10 w-10 place-items-center rounded-full border-2 border-white bg-black text-xs font-semibold text-white">+5</div>
+                      </div>
+                    </div>
+                  </div>
+                </section>
+
+                <aside class="rounded-[1.4rem] border border-black/6 bg-white/85 p-4">
+                  <div class="mb-4 flex items-center justify-between">
+                    <div class="text-sm font-semibold">Quick metrics</div>
+                    <div class="text-xs text-black/40">Live</div>
+                  </div>
+                  <div class="space-y-3">
+                    <div class="rounded-2xl border border-black/6 bg-[#fbfbfa] p-4">
+                      <div class="text-xs uppercase tracking-[0.18em] text-black/40">Qualified leads</div>
+                      <div class="mt-2 text-3xl font-semibold tracking-[-0.06em]">438</div>
+                      <div class="mt-1 text-xs text-emerald-600">+12.4% this week</div>
+                    </div>
+                    <div class="rounded-2xl border border-black/6 bg-[#fbfbfa] p-4">
+                      <div class="mb-3 flex items-center justify-between text-xs uppercase tracking-[0.18em] text-black/40"><span>Revenue</span><span>Jul–Sep</span></div>
+                      <svg viewBox="0 0 260 120" class="w-full overflow-visible">
+                        <defs>
+                          <linearGradient id="lineFade" x1="0" x2="1">
+                            <stop offset="0%" stop-color="#111" stop-opacity=".25" />
+                            <stop offset="100%" stop-color="#111" stop-opacity="1" />
+                          </linearGradient>
+                        </defs>
+                        <g class="chart-grid">
+                          <line x1="0" y1="20" x2="260" y2="20"></line>
+                          <line x1="0" y1="50" x2="260" y2="50"></line>
+                          <line x1="0" y1="80" x2="260" y2="80"></line>
+                          <line x1="0" y1="110" x2="260" y2="110"></line>
+                        </g>
+                        <path id="heroChartPath" d="M5 94 C32 90, 42 72, 64 70 S103 79, 125 56 S169 18, 196 22 S225 36, 255 16" fill="none" stroke="url(#lineFade)" stroke-width="4.5" stroke-linecap="round"></path>
+                        <circle id="heroChartDot" cx="255" cy="16" r="5" fill="#111"></circle>
+                      </svg>
+                    </div>
+                    <div class="rounded-2xl border border-black/6 bg-black p-4 text-white">
+                      <div class="text-xs uppercase tracking-[0.18em] text-white/45">Alerts</div>
+                      <div id="heroAlert" class="mt-2 text-sm">3 accounts need follow-up in the next 2 hours.</div>
+                    </div>
+                  </div>
+                </aside>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="mt-10 reveal">
+          <div class="overflow-hidden rounded-full border border-black/6 bg-white/60 py-4 shadow-soft">
+            <div class="marquee-track flex animate-marquee items-center gap-8 pr-8 text-sm text-black/45 [animation-play-state:running] hover:[animation-play-state:paused]">
+              <span class="whitespace-nowrap pl-8">Modal</span>
+              <span class="whitespace-nowrap">Coca-Cola</span>
+              <span class="whitespace-nowrap">Flatfile</span>
+              <span class="whitespace-nowrap">Replicate</span>
+              <span class="whitespace-nowrap">Hightouch</span>
+              <span class="whitespace-nowrap">Vercel</span>
+              <span class="whitespace-nowrap">Ramp</span>
+              <span class="whitespace-nowrap">Mistral</span>
+              <span class="whitespace-nowrap">Notion</span>
+              <span class="whitespace-nowrap">Modal</span>
+              <span class="whitespace-nowrap">Coca-Cola</span>
+              <span class="whitespace-nowrap">Flatfile</span>
+              <span class="whitespace-nowrap">Replicate</span>
+              <span class="whitespace-nowrap">Hightouch</span>
+              <span class="whitespace-nowrap">Vercel</span>
+              <span class="whitespace-nowrap">Ramp</span>
+              <span class="whitespace-nowrap">Mistral</span>
+              <span class="whitespace-nowrap">Notion</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="platform" class="px-4 py-20 md:px-6 lg:px-8 lg:py-28">
+      <div class="mx-auto max-w-[1380px]">
+        <div class="mb-10 reveal">
+          <div class="eyebrow mb-4">01 / Powerful platform</div>
+          <div class="flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
+            <div>
+              <h2 class="section-title max-w-[720px] font-semibold tracking-[-0.08em]">GTM at full throttle.</h2>
+            </div>
+            <p class="max-w-[560px] text-base leading-7 text-black/58">Execute your revenue strategy with precision. Design powerful workflows, deploy AI, integrate your data and build detailed reports — all in one platform.</p>
+          </div>
+        </div>
+
+        <div class="grid gap-6 lg:grid-cols-3">
+          <article class="reveal hover-lift line-card rounded-[2rem] p-6 lg:col-span-2">
+            <div class="mb-5 flex items-center justify-between">
+              <div>
+                <div class="eyebrow mb-2">Automate everything</div>
+                <h3 class="text-2xl font-semibold tracking-[-0.05em]">You're in control.</h3>
+              </div>
+              <a href="#" class="text-sm text-black/50 transition hover:text-black">Explore automations →</a>
+            </div>
+            <p class="mb-6 max-w-2xl text-black/58">Automate even the most complex business processes with an intelligent automation engine.</p>
+            <div class="grid gap-4 md:grid-cols-[1fr_280px]">
+              <div class="rounded-[1.6rem] border border-black/6 bg-[#fbfbfa] p-4">
+                <div class="space-y-3" id="workflowPreview">
+                  <div class="rounded-2xl border border-black/6 bg-white p-4">
+                    <div class="mb-2 text-xs uppercase tracking-[0.18em] text-black/35">Trigger</div>
+                    <div class="text-sm font-semibold">When Deal updated</div>
+                    <div class="mt-1 text-sm text-black/50">Trigger when a Deal’s status is updated</div>
+                  </div>
+                  <div class="ml-6 h-7 w-px bg-gradient-to-b from-black/18 to-transparent"></div>
+                  <div class="rounded-2xl border border-black/6 bg-white p-4">
+                    <div class="mb-2 text-xs uppercase tracking-[0.18em] text-black/35">Condition</div>
+                    <div class="text-sm font-semibold">Route to upsell or nurture</div>
+                    <div class="mt-1 text-sm text-black/50">Split logic based on product usage and plan.</div>
+                  </div>
+                  <div class="ml-6 h-7 w-px bg-gradient-to-b from-black/18 to-transparent"></div>
+                  <div class="grid gap-3 md:grid-cols-2">
+                    <div class="rounded-2xl border border-black/6 bg-black p-4 text-white">
+                      <div class="mb-2 text-xs uppercase tracking-[0.18em] text-white/40">Sequence</div>
+                      <div class="text-sm font-semibold">Power user upsell</div>
+                    </div>
+                    <div class="rounded-2xl border border-black/6 bg-white p-4">
+                      <div class="mb-2 text-xs uppercase tracking-[0.18em] text-black/35">Sequence</div>
+                      <div class="text-sm font-semibold">Nurture</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="space-y-3">
+                <button class="workflow-item w-full rounded-2xl border border-black/6 bg-black px-4 py-4 text-left text-white" data-workflow="upsell">
+                  <div class="text-sm font-semibold">Re-engage warm leads</div>
+                  <div class="mt-1 text-xs text-white/60">Lifecycle automation</div>
+                </button>
+                <button class="workflow-item w-full rounded-2xl border border-black/6 bg-white px-4 py-4 text-left" data-workflow="routing">
+                  <div class="text-sm font-semibold">MQL lead routing</div>
+                  <div class="mt-1 text-xs text-black/45">RevOps assignment logic</div>
+                </button>
+                <button class="workflow-item w-full rounded-2xl border border-black/6 bg-white px-4 py-4 text-left" data-workflow="health">
+                  <div class="text-sm font-semibold">Monitor customer health</div>
+                  <div class="mt-1 text-xs text-black/45">Success motion</div>
+                </button>
+                <button class="workflow-item w-full rounded-2xl border border-black/6 bg-white px-4 py-4 text-left" data-workflow="expansion">
+                  <div class="text-sm font-semibold">Identify expansion opportunity</div>
+                  <div class="mt-1 text-xs text-black/45">Expansion signal</div>
+                </button>
+              </div>
+            </div>
+          </article>
+
+          <article class="reveal hover-lift line-card rounded-[2rem] p-6">
+            <div class="eyebrow mb-2">Deploy AI</div>
+            <h3 class="mb-3 text-2xl font-semibold tracking-[-0.05em]">Ask, search, create.</h3>
+            <p class="mb-6 text-black/58">Search and create with Ask Attio, connect your stack with MCP, or put agents to work on complex tasks like prospecting and lead scoring.</p>
+            <div class="space-y-3 rounded-[1.5rem] border border-black/6 bg-[#fbfbfa] p-4">
+              <div class="rounded-2xl border border-black/6 bg-white p-4">
+                <div class="mb-2 text-xs uppercase tracking-[0.18em] text-black/35">AI</div>
+                <div class="text-sm font-semibold">Does the company sell software to other businesses?</div>
+                <div class="mt-3 rounded-xl bg-black px-3 py-3 text-sm text-white">Yes, they are a B2B SaaS business.</div>
+              </div>
+              <div class="rounded-2xl border border-black/6 bg-white p-4">
+                <div class="mb-2 text-xs uppercase tracking-[0.18em] text-black/35">AI</div>
+                <div class="text-sm font-semibold">Did the company raise any funds recently?</div>
+                <div class="mt-3 rounded-xl bg-white px-3 py-3 text-sm text-black/60 border border-black/6">$25M raised in Series A funding round.</div>
+              </div>
+              <div class="rounded-2xl border border-black/6 bg-black p-4 text-white">
+                <div class="mb-2 text-xs uppercase tracking-[0.18em] text-white/45">AI</div>
+                <div class="text-sm font-semibold">Who are the key stakeholders at the company?</div>
+                <div class="mt-3 text-sm text-white/72">Adam Kingsley, CEO; Anne Zaragoza, CTO; Tom Wagner, VP of Sales.</div>
+              </div>
+            </div>
+          </article>
+
+          <article class="reveal hover-lift line-card rounded-[2rem] p-6 lg:col-span-2">
+            <div class="mb-5 flex items-center justify-between">
+              <div>
+                <div class="eyebrow mb-2">Connect any type of data</div>
+                <h3 class="text-2xl font-semibold tracking-[-0.05em]">One real-time source of truth.</h3>
+              </div>
+              <a href="#" class="text-sm text-black/50 transition hover:text-black">Explore data →</a>
+            </div>
+            <p class="mb-6 max-w-2xl text-black/58">Sync product data, billing data, and everything in between into a single adaptive system.</p>
+            <div class="grid gap-4 md:grid-cols-3">
+              <div class="rounded-[1.4rem] border border-black/6 bg-white p-4">
+                <div class="mb-5 flex items-center gap-2"><span class="h-2.5 w-2.5 rounded-full bg-black"></span><span class="text-sm font-medium">Workspace</span></div>
+                <div class="text-4xl font-semibold tracking-[-0.07em]">2,857</div>
+                <div class="mt-1 text-sm text-black/45">Records</div>
+              </div>
+              <div class="rounded-[1.4rem] border border-black/6 bg-white p-4">
+                <div class="mb-5 flex items-center gap-2"><span class="h-2.5 w-2.5 rounded-full bg-black"></span><span class="text-sm font-medium">Company</span></div>
+                <div class="text-4xl font-semibold tracking-[-0.07em]">3,096</div>
+                <div class="mt-1 text-sm text-black/45">Records</div>
+              </div>
+              <div class="rounded-[1.4rem] border border-black/6 bg-black p-4 text-white">
+                <div class="mb-5 flex items-center gap-2"><span class="h-2.5 w-2.5 rounded-full bg-white"></span><span class="text-sm font-medium">Deal</span></div>
+                <div class="text-4xl font-semibold tracking-[-0.07em]">5,490</div>
+                <div class="mt-1 text-sm text-white/55">Records</div>
+              </div>
+            </div>
+          </article>
+
+          <article class="reveal hover-lift line-card rounded-[2rem] p-6">
+            <div class="eyebrow mb-2">Powerful reporting</div>
+            <h3 class="mb-3 text-2xl font-semibold tracking-[-0.05em]">Insights in real time.</h3>
+            <p class="mb-6 text-black/58">Create real-time, detailed reports that scale with your data. Visualize, customize, and get deep insights in seconds.</p>
+            <div class="rounded-[1.5rem] border border-black/6 bg-[#fbfbfa] p-4">
+              <div class="mb-4 flex flex-wrap gap-2 text-xs">
+                <span class="rounded-full border border-black/6 bg-black px-3 py-2 text-white">7D</span>
+                <span class="rounded-full border border-black/6 bg-white px-3 py-2">30D</span>
+                <span class="rounded-full border border-black/6 bg-white px-3 py-2">3M</span>
+                <span class="rounded-full border border-black/6 bg-white px-3 py-2">6M</span>
+                <span class="rounded-full border border-black/6 bg-white px-3 py-2">12M</span>
+              </div>
+              <svg viewBox="0 0 320 200" class="w-full">
+                <g class="chart-grid">
+                  <line x1="0" y1="24" x2="320" y2="24"></line>
+                  <line x1="0" y1="62" x2="320" y2="62"></line>
+                  <line x1="0" y1="100" x2="320" y2="100"></line>
+                  <line x1="0" y1="138" x2="320" y2="138"></line>
+                  <line x1="0" y1="176" x2="320" y2="176"></line>
+                </g>
+                <path d="M10 164 C38 152, 60 148, 84 136 S130 118, 156 110 S200 84, 224 86 S270 78, 308 42" fill="none" stroke="#111" stroke-width="4.5" stroke-linecap="round"></path>
+                <path d="M10 178 C44 176, 66 170, 92 160 S146 156, 176 142 S234 132, 260 120 S286 108, 308 98" fill="none" stroke="#111" stroke-width="2.5" stroke-opacity=".26" stroke-linecap="round"></path>
+              </svg>
+              <div class="mt-4 grid grid-cols-3 gap-3 text-sm">
+                <div class="rounded-2xl border border-black/6 bg-white p-3">
+                  <div class="text-black/40">July</div>
+                  <div class="mt-2 font-semibold">$1.92M</div>
+                </div>
+                <div class="rounded-2xl border border-black/6 bg-white p-3">
+                  <div class="text-black/40">August</div>
+                  <div class="mt-2 font-semibold">$2.14M</div>
+                </div>
+                <div class="rounded-2xl border border-black/6 bg-black p-3 text-white">
+                  <div class="text-white/40">September</div>
+                  <div class="mt-2 font-semibold">$2.80M</div>
+                </div>
+              </div>
+            </div>
+          </article>
+        </div>
+
+        <div id="trial" class="reveal mt-10 rounded-[2rem] border border-black/8 bg-black px-6 py-10 text-center text-white md:px-8 md:py-14">
+          <div class="mx-auto max-w-2xl">
+            <h3 class="text-4xl font-semibold tracking-[-0.08em]">Start with a 14-day free trial of Pro.</h3>
+            <div class="mt-6 flex flex-col items-center justify-center gap-3 sm:flex-row">
+              <a href="#" class="rounded-full bg-white px-6 py-3 text-sm font-medium text-black">Start for free</a>
+              <a href="#pricing" class="rounded-full border border-white/15 px-6 py-3 text-sm font-medium text-white/85">See our plans</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="px-4 py-20 md:px-6 lg:px-8 lg:py-28">
+      <div class="mx-auto max-w-[1380px]">
+        <div class="mb-10 reveal">
+          <div class="eyebrow mb-4">02 / Adaptive model</div>
+          <div class="flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
+            <div>
+              <h2 class="section-title max-w-[800px] font-semibold tracking-[-0.08em]">A seismic shift in CRM flexibility.</h2>
+            </div>
+            <p class="max-w-[560px] text-base leading-7 text-black/58">Attio’s powerful data model adapts to how your business works, not the other way around. Your business model — perfectly reflected in your CRM.</p>
+          </div>
+        </div>
+
+        <div class="reveal mb-6 flex flex-wrap gap-2">
+          <button class="feature-tab active rounded-full border border-black/10 px-4 py-2 text-sm" data-model="scaleups">Scale-ups</button>
+          <button class="feature-tab rounded-full border border-black/10 px-4 py-2 text-sm" data-model="saas">SaaS startups</button>
+          <button class="feature-tab rounded-full border border-black/10 px-4 py-2 text-sm" data-model="smb">SMBs</button>
+          <button class="feature-tab rounded-full border border-black/10 px-4 py-2 text-sm" data-model="investors">Investors</button>
+        </div>
+
+        <div class="grid gap-6 lg:grid-cols-[1.2fr_.8fr]">
+          <article class="reveal line-card rounded-[2rem] p-4 md:p-6">
+            <div id="modelCanvas" class="relative min-h-[520px] overflow-hidden rounded-[1.7rem] border border-black/6 bg-[#fbfbfa] p-4 md:p-8">
+              <div class="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(255,255,255,0.9),transparent_45%)]"></div>
+              <div class="absolute left-1/2 top-1/2 h-[32rem] w-[32rem] -translate-x-1/2 -translate-y-1/2 rounded-full bg-stone-200/50 blur-3xl"></div>
+              <div class="relative grid gap-4 md:grid-cols-3">
+                <div class="space-y-4">
+                  <div class="model-card animate-floaty rounded-[1.5rem] border border-black/6 bg-white p-4 shadow-float" style="animation-delay:0s">
+                    <div class="mb-3 text-xs uppercase tracking-[0.18em] text-black/35">User</div>
+                    <div class="space-y-2 text-sm text-black/65">
+                      <div>User ID</div>
+                      <div>Engagement score</div>
+                      <div>User type</div>
+                      <div>4 more attributes</div>
+                    </div>
+                  </div>
+                  <div class="model-card animate-floaty rounded-[1.5rem] border border-black/6 bg-white p-4 shadow-float" style="animation-delay:.5s">
+                    <div class="mb-3 text-xs uppercase tracking-[0.18em] text-black/35">Deal</div>
+                    <div class="space-y-2 text-sm text-black/65">
+                      <div>Deal name</div>
+                      <div>Workspace</div>
+                      <div>Stage</div>
+                      <div>2 more attributes</div>
+                    </div>
+                  </div>
+                </div>
+                <div class="space-y-4 pt-8">
+                  <div class="model-card animate-floaty rounded-[1.5rem] border border-black/6 bg-black p-4 text-white shadow-float" style="animation-delay:1s">
+                    <div class="mb-3 text-xs uppercase tracking-[0.18em] text-white/35">Person</div>
+                    <div class="space-y-2 text-sm text-white/68">
+                      <div>Name</div>
+                      <div>Email</div>
+                      <div>Company</div>
+                      <div>12 more attributes</div>
+                    </div>
+                  </div>
+                  <div class="model-card animate-floaty rounded-[1.5rem] border border-dashed border-black/14 bg-white/60 p-4 shadow-soft" style="animation-delay:1.6s">
+                    <div class="text-sm font-medium">+ Add object</div>
+                  </div>
+                </div>
+                <div class="space-y-4 md:pt-16">
+                  <div class="model-card animate-floaty rounded-[1.5rem] border border-black/6 bg-white p-4 shadow-float" style="animation-delay:.2s">
+                    <div class="mb-3 text-xs uppercase tracking-[0.18em] text-black/35">Workspace</div>
+                    <div class="space-y-2 text-sm text-black/65">
+                      <div>Name</div>
+                      <div>Company</div>
+                      <div>Status</div>
+                      <div>7 more attributes</div>
+                    </div>
+                  </div>
+                  <div class="model-card animate-floaty rounded-[1.5rem] border border-black/6 bg-white p-4 shadow-float" style="animation-delay:1.3s">
+                    <div class="mb-3 text-xs uppercase tracking-[0.18em] text-black/35">Company</div>
+                    <div class="space-y-2 text-sm text-black/65">
+                      <div>Domain</div>
+                      <div>Industry</div>
+                      <div>Location</div>
+                      <div>8 more attributes</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <svg class="pointer-events-none absolute inset-0 h-full w-full opacity-50" viewBox="0 0 1000 700" preserveAspectRatio="none">
+                <path d="M275 180 C420 240, 470 270, 510 336" fill="none" stroke="#111" stroke-opacity=".18" stroke-width="1.5" stroke-dasharray="5 8" />
+                <path d="M728 240 C645 278, 590 310, 515 336" fill="none" stroke="#111" stroke-opacity=".18" stroke-width="1.5" stroke-dasharray="5 8" />
+                <path d="M285 470 C385 418, 435 388, 507 336" fill="none" stroke="#111" stroke-opacity=".18" stroke-width="1.5" stroke-dasharray="5 8" />
+                <path d="M720 510 C648 450, 585 410, 515 336" fill="none" stroke="#111" stroke-opacity=".18" stroke-width="1.5" stroke-dasharray="5 8" />
+              </svg>
+            </div>
+          </article>
+
+          <div class="space-y-6">
+            <article class="reveal line-card rounded-[2rem] p-6">
+              <div class="mb-3 text-sm font-semibold">Bravado’s favorite features</div>
+              <p class="text-lg leading-8 text-black/70">“Attio is the first CRM that feels truly modern. It’s powerful, flexible, and fast to build with. There’s nothing like it on the market.”</p>
+              <div class="mt-6 flex items-center gap-3">
+                <div class="grid h-12 w-12 place-items-center rounded-full bg-black text-sm font-semibold text-white">SM</div>
+                <div>
+                  <div class="text-sm font-semibold">Sahil Mansuri</div>
+                  <div class="text-xs text-black/45">CEO & Co-founder</div>
+                </div>
+              </div>
+              <div class="mt-6 flex flex-wrap gap-2 text-sm">
+                <span class="rounded-full border border-black/8 bg-white px-3 py-2">Workflows</span>
+                <span class="rounded-full border border-black/8 bg-white px-3 py-2">Deals</span>
+                <span class="rounded-full border border-black/8 bg-black px-3 py-2 text-white">Reports</span>
+              </div>
+            </article>
+
+            <article class="reveal line-card rounded-[2rem] p-6">
+              <div class="mb-3 text-sm font-semibold">Flatfile’s favorite features</div>
+              <p class="text-lg leading-8 text-black/70">Built for modern teams that need speed, structure, and a CRM that bends around the business instead of the reverse.</p>
+              <div class="mt-6 flex items-center gap-3">
+                <div class="grid h-12 w-12 place-items-center rounded-full bg-stone-300 text-sm font-semibold text-black">DB</div>
+                <div>
+                  <div class="text-sm font-semibold">David Boskovic</div>
+                  <div class="text-xs text-black/45">CEO & Founder</div>
+                </div>
+              </div>
+              <div class="mt-6 flex flex-wrap gap-2 text-sm">
+                <span class="rounded-full border border-black/8 bg-white px-3 py-2">Custom objects</span>
+                <span class="rounded-full border border-black/8 bg-black px-3 py-2 text-white">Reports</span>
+              </div>
+            </article>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="customers" class="px-4 py-20 md:px-6 lg:px-8 lg:py-28">
+      <div class="mx-auto max-w-[1380px]">
+        <div class="grid gap-6 lg:grid-cols-2">
+          <article class="reveal line-card relative overflow-hidden rounded-[2rem] p-6 md:p-8">
+            <div class="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(255,255,255,.9),transparent_45%)]"></div>
+            <div class="relative">
+              <div class="eyebrow mb-3">Trusted by revenue teams</div>
+              <h3 class="mb-3 text-4xl font-semibold tracking-[-0.08em]">Build with speed, ship with confidence.</h3>
+              <p class="max-w-xl text-base leading-7 text-black/58">A modern visual language, polished panels, soft borders, massive typography, and highly animated product surfaces — recreated in a clean Tailwind + vanilla JS stack.</p>
+              <div class="mt-8 grid gap-4 sm:grid-cols-3">
+                <div class="rounded-[1.4rem] border border-black/6 bg-white p-4">
+                  <div class="text-3xl font-semibold tracking-[-0.06em]">4.9</div>
+                  <div class="mt-1 text-sm text-black/45">G2 rating</div>
+                </div>
+                <div class="rounded-[1.4rem] border border-black/6 bg-white p-4">
+                  <div class="text-3xl font-semibold tracking-[-0.06em]">83%</div>
+                  <div class="mt-1 text-sm text-black/45">Avg. adoption</div>
+                </div>
+                <div class="rounded-[1.4rem] border border-black/6 bg-black p-4 text-white">
+                  <div class="text-3xl font-semibold tracking-[-0.06em]">2×</div>
+                  <div class="mt-1 text-sm text-white/50">Faster setup</div>
+                </div>
+              </div>
+            </div>
+          </article>
+
+          <article class="reveal line-card rounded-[2rem] p-6 md:p-8">
+            <div class="eyebrow mb-3">Details</div>
+            <h3 class="mb-5 text-4xl font-semibold tracking-[-0.08em]">Interactions that feel alive.</h3>
+            <div class="grid gap-4 sm:grid-cols-2">
+              <div class="rounded-[1.4rem] border border-black/6 bg-white p-5">
+                <div class="mb-3 text-sm font-semibold">Scroll reveals</div>
+                <p class="text-sm leading-6 text-black/55">All major blocks animate into view with subtle vertical motion and opacity easing.</p>
+              </div>
+              <div class="rounded-[1.4rem] border border-black/6 bg-white p-5">
+                <div class="mb-3 text-sm font-semibold">Magnetic buttons</div>
+                <p class="text-sm leading-6 text-black/55">Primary CTAs react to cursor proximity for a premium landing page feel.</p>
+              </div>
+              <div class="rounded-[1.4rem] border border-black/6 bg-white p-5">
+                <div class="mb-3 text-sm font-semibold">3D hero tilt</div>
+                <p class="text-sm leading-6 text-black/55">The main product surface slightly rotates based on cursor movement.</p>
+              </div>
+              <div class="rounded-[1.4rem] border border-black/6 bg-black p-5 text-white">
+                <div class="mb-3 text-sm font-semibold">Dynamic tab states</div>
+                <p class="text-sm leading-6 text-white/60">Dashboard and model tabs recompose the UI without React.</p>
+              </div>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer id="resources" class="border-t border-white/8 bg-[#050505] px-4 pb-12 pt-16 text-white md:px-6 lg:px-8">
+    <div class="mx-auto max-w-[1380px]">
+      <div class="mb-14 flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between">
+        <div>
+          <div class="mb-4 flex items-center gap-3">
+            <div class="grid h-10 w-10 place-items-center rounded-full bg-white text-black">◔</div>
+            <span class="text-xl font-semibold tracking-[-0.04em]">attio</span>
+          </div>
+          <h2 class="max-w-[620px] text-4xl font-semibold tracking-[-0.08em] text-white md:text-5xl">A polished Attio-inspired front-end build.</h2>
+        </div>
+        <a href="#" class="rounded-full border border-white/10 bg-white px-6 py-3 text-sm font-medium text-black">Start for free</a>
+      </div>
+
+      <div class="grid gap-10 border-t border-white/10 pt-10 sm:grid-cols-2 lg:grid-cols-5">
+        <div>
+          <div class="mb-4 text-sm font-semibold text-white">Platform</div>
+          <div class="space-y-3 text-sm">
+            <a class="footer-link block" href="#">CRM Platform</a>
+            <a class="footer-link block" href="#">AI Native</a>
+            <a class="footer-link block" href="#">Data model</a>
+            <a class="footer-link block" href="#">Workflows</a>
+            <a class="footer-link block" href="#">Reporting</a>
+          </div>
+        </div>
+        <div>
+          <div class="mb-4 text-sm font-semibold text-white">Resources</div>
+          <div class="space-y-3 text-sm">
+            <a class="footer-link block" href="#">Help center</a>
+            <a class="footer-link block" href="#">Academy</a>
+            <a class="footer-link block" href="#">Developer docs</a>
+            <a class="footer-link block" href="#">Partner programs</a>
+          </div>
+        </div>
+        <div>
+          <div class="mb-4 text-sm font-semibold text-white">Company</div>
+          <div class="space-y-3 text-sm">
+            <a class="footer-link block" href="#">Changelog</a>
+            <a class="footer-link block" href="#">Announcements</a>
+            <a class="footer-link block" href="#">Engineering blog</a>
+            <a class="footer-link block" href="#">Careers</a>
+          </div>
+        </div>
+        <div id="pricing">
+          <div class="mb-4 text-sm font-semibold text-white">Compare</div>
+          <div class="space-y-3 text-sm">
+            <a class="footer-link block" href="#">Customers</a>
+            <a class="footer-link block" href="#">Pricing</a>
+            <a class="footer-link block" href="#">Start free trial</a>
+            <a class="footer-link block" href="#">Talk to sales</a>
+          </div>
+        </div>
+        <div>
+          <div class="mb-4 text-sm font-semibold text-white">Follow</div>
+          <div class="space-y-3 text-sm">
+            <a class="footer-link block" href="#">X / Twitter</a>
+            <a class="footer-link block" href="#">LinkedIn</a>
+            <a class="footer-link block" href="#">GitHub</a>
+            <a class="footer-link block" href="#">YouTube</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="mt-10 flex flex-col gap-4 border-t border-white/10 pt-6 text-xs text-white/35 sm:flex-row sm:items-center sm:justify-between">
+        <div>© 2026 Attio-inspired front-end demo.</div>
+        <div>Built with TailwindCSS + vanilla JavaScript.</div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    const cursor = document.getElementById('cursor');
+    window.addEventListener('mousemove', (e) => {
+      if (!cursor) return;
+      cursor.style.transform = `translate(${e.clientX}px, ${e.clientY}px)`;
+    });
+
+    const reveals = document.querySelectorAll('.reveal');
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) entry.target.classList.add('is-visible');
+      });
+    }, { threshold: 0.12 });
+    reveals.forEach((el, i) => {
+      el.style.transitionDelay = `${Math.min(i * 40, 240)}ms`;
+      io.observe(el);
+    });
+
+    const header = document.getElementById('siteHeader');
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 24) {
+        header.classList.add('shadow-sm');
+        header.classList.add('border-black/8');
+      } else {
+        header.classList.remove('shadow-sm');
+        header.classList.remove('border-black/8');
+      }
+    });
+
+    const heroPanel = document.getElementById('heroPanel');
+    heroPanel.addEventListener('mousemove', (e) => {
+      const rect = heroPanel.getBoundingClientRect();
+      const x = (e.clientX - rect.left) / rect.width - 0.5;
+      const y = (e.clientY - rect.top) / rect.height - 0.5;
+      heroPanel.style.transform = `perspective(1800px) rotateX(${10 - y * 6}deg) rotateY(${-6 + x * 8}deg)`;
+    });
+    heroPanel.addEventListener('mouseleave', () => {
+      heroPanel.style.transform = 'perspective(1800px) rotateX(10deg) rotateY(-6deg)';
+    });
+
+    const magnets = document.querySelectorAll('.magnetic');
+    magnets.forEach((button) => {
+      button.addEventListener('mousemove', (e) => {
+        const rect = button.getBoundingClientRect();
+        const x = e.clientX - rect.left - rect.width / 2;
+        const y = e.clientY - rect.top - rect.height / 2;
+        button.style.transform = `translate(${x * 0.12}px, ${y * 0.12}px)`;
+      });
+      button.addEventListener('mouseleave', () => {
+        button.style.transform = 'translate(0,0)';
+      });
+    });
+
+    const workflowViews = {
+      upsell: [
+        { label: 'Trigger', title: 'When Deal updated', text: 'Trigger when a Deal’s status is updated' },
+        { label: 'Condition', title: 'Route to upsell or nurture', text: 'Split logic based on product usage and plan.' },
+        { label: 'Sequence', title: 'Power user upsell', dark: true },
+        { label: 'Sequence', title: 'Nurture' }
+      ],
+      routing: [
+        { label: 'Trigger', title: 'New lead created', text: 'Watch inbound form submissions in real time.' },
+        { label: 'Condition', title: 'Match territory, size, and source', text: 'Apply routing logic to assign ownership.' },
+        { label: 'Queue', title: 'Enterprise AE', dark: true },
+        { label: 'Queue', title: 'SMB pool' }
+      ],
+      health: [
+        { label: 'Trigger', title: 'Weekly account scan', text: 'Read product usage and support events.' },
+        { label: 'Condition', title: 'Detect risk signals', text: 'Flag churn or onboarding issues automatically.' },
+        { label: 'Action', title: 'Create success task', dark: true },
+        { label: 'Action', title: 'Notify owner' }
+      ],
+      expansion: [
+        { label: 'Trigger', title: 'Usage exceeds threshold', text: 'Identify accounts with strong expansion behavior.' },
+        { label: 'Condition', title: 'Confirm champion activity', text: 'Verify engagement from core stakeholders.' },
+        { label: 'Action', title: 'Open expansion play', dark: true },
+        { label: 'Action', title: 'Draft outreach' }
+      ]
+    };
+
+    const workflowPreview = document.getElementById('workflowPreview');
+    const workflowButtons = document.querySelectorAll('.workflow-item');
+    workflowButtons.forEach((button) => {
+      button.addEventListener('click', () => {
+        workflowButtons.forEach((b) => {
+          b.classList.remove('bg-black', 'text-white');
+          b.classList.add('bg-white');
+          const sub = b.querySelector('.mt-1');
+          if (sub) sub.classList.remove('text-white/60');
+          if (sub) sub.classList.add('text-black/45');
+        });
+        button.classList.add('bg-black', 'text-white');
+        button.classList.remove('bg-white');
+        const sub = button.querySelector('.mt-1');
+        if (sub) sub.classList.add('text-white/60');
+        if (sub) sub.classList.remove('text-black/45');
+
+        const view = workflowViews[button.dataset.workflow];
+        workflowPreview.innerHTML = `
+          <div class="rounded-2xl border border-black/6 bg-white p-4">
+            <div class="mb-2 text-xs uppercase tracking-[0.18em] text-black/35">${view[0].label}</div>
+            <div class="text-sm font-semibold">${view[0].title}</div>
+            <div class="mt-1 text-sm text-black/50">${view[0].text}</div>
+          </div>
+          <div class="ml-6 h-7 w-px bg-gradient-to-b from-black/18 to-transparent"></div>
+          <div class="rounded-2xl border border-black/6 bg-white p-4">
+            <div class="mb-2 text-xs uppercase tracking-[0.18em] text-black/35">${view[1].label}</div>
+            <div class="text-sm font-semibold">${view[1].title}</div>
+            <div class="mt-1 text-sm text-black/50">${view[1].text}</div>
+          </div>
+          <div class="ml-6 h-7 w-px bg-gradient-to-b from-black/18 to-transparent"></div>
+          <div class="grid gap-3 md:grid-cols-2">
+            <div class="rounded-2xl border border-black/6 bg-black p-4 text-white">
+              <div class="mb-2 text-xs uppercase tracking-[0.18em] text-white/40">${view[2].label}</div>
+              <div class="text-sm font-semibold">${view[2].title}</div>
+            </div>
+            <div class="rounded-2xl border border-black/6 bg-white p-4">
+              <div class="mb-2 text-xs uppercase tracking-[0.18em] text-black/35">${view[3].label}</div>
+              <div class="text-sm font-semibold">${view[3].title}</div>
+            </div>
+          </div>`;
+      });
+    });
+
+    const heroStates = {
+      ask: {
+        title: 'Good morning, Alex',
+        search: ['Auto', 'Prep for next meeting', 'Recap last call'],
+        meetings: [
+          ['Basepoint × Stripe', '10:00 - 11:00 AM', false],
+          ['Ashley & Martin', '10:20 - 10:40 AM', false],
+          ['Greenleaf // Basepoint', '2:30 - 3:00 PM', true],
+        ],
+        detailTitle: 'Demo call with Greenleaf team to help them get the most out of their PRO trial.',
+        alert: '3 accounts need follow-up in the next 2 hours.'
+      },
+      data: {
+        title: 'Adaptive data model',
+        search: ['Sync objects', 'View relationships', 'Create custom schema'],
+        meetings: [
+          ['Workspace', '2,857 records', false],
+          ['Companies', '3,096 records', false],
+          ['Deals', '5,490 records', true],
+        ],
+        detailTitle: 'Standard objects, custom objects, and relationships all reflected in one schema.',
+        alert: '6 custom objects synced successfully.'
+      },
+      flows: {
+        title: 'Automation center',
+        search: ['Route MQLs', 'Enroll in sequence', 'Trigger follow-up'],
+        meetings: [
+          ['Deal updated', 'Send upsell path', false],
+          ['Lead enriched', 'Assign owner', false],
+          ['Health risk', 'Open success play', true],
+        ],
+        detailTitle: 'Build branching workflows with triggers, conditions, AI, and actions.',
+        alert: '4 workflow runs completed in the last 5 min.'
+      },
+      reporting: {
+        title: 'Revenue reporting',
+        search: ['MRR trend', 'Pipeline by stage', 'Conversion summary'],
+        meetings: [
+          ['July', '$1.92M', false],
+          ['August', '$2.14M', false],
+          ['September', '$2.80M', true],
+        ],
+        detailTitle: 'Get live visibility into revenue, attribution, and pipeline performance.',
+        alert: 'Revenue pacing is 18% above target.'
+      }
+    };
+
+    const heroTitle = document.getElementById('heroTitle');
+    const heroSearch = document.getElementById('heroSearch');
+    const heroCenterArea = document.getElementById('heroCenterArea');
+    const alertBox = document.getElementById('heroAlert');
+    const dashboardSwitches = document.querySelectorAll('.dashboard-switch');
+
+    dashboardSwitches.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        dashboardSwitches.forEach((b) => {
+          b.classList.remove('active', 'bg-black', 'text-white');
+          b.classList.add('text-black/65');
+        });
+        btn.classList.add('active', 'bg-black', 'text-white');
+        btn.classList.remove('text-black/65');
+
+        const state = heroStates[btn.dataset.dashboard];
+        heroTitle.textContent = state.title;
+        heroSearch.innerHTML = `
+          <div class="mb-3 text-sm font-medium">Ask anything...</div>
+          <div class="flex flex-wrap gap-2 text-xs">
+            ${state.search.map(item => `<span class="rounded-full border border-black/8 bg-white px-3 py-2">${item}</span>`).join('')}
+          </div>`;
+
+        const cards = heroCenterArea.querySelectorAll('.rounded-\[1\.2rem\].border.border-black\/6.bg-\[\#fbfbfa\].p-4');
+        const listHolder = cards[0].querySelector('.space-y-3');
+        listHolder.innerHTML = state.meetings.map(([title, time, active]) => `
+          <div class="rounded-2xl border border-black/6 ${active ? 'bg-black text-white' : 'bg-white'} p-3">
+            <div class="text-sm font-semibold">${title}</div>
+            <div class="mt-1 text-xs ${active ? 'text-white/65' : 'text-black/50'}">${time}</div>
+          </div>
+        `).join('');
+        cards[1].querySelector('p').textContent = state.detailTitle;
+        alertBox.textContent = state.alert;
+      });
+    });
+
+    const modelVariants = {
+      scaleups: ['User', 'Deal', 'Person', 'Workspace', 'Company'],
+      saas: ['Account', 'Subscription', 'Person', 'Product event', 'Company'],
+      smb: ['Lead', 'Pipeline', 'Customer', 'Workspace', 'Invoice'],
+      investors: ['Fund', 'Company', 'Deal', 'Partner', 'Person']
+    };
+
+    const modelCanvas = document.getElementById('modelCanvas');
+    const modelCards = modelCanvas.querySelectorAll('.model-card');
+    const modelTabs = document.querySelectorAll('.feature-tab');
+    modelTabs.forEach((tab) => {
+      tab.addEventListener('click', () => {
+        modelTabs.forEach((t) => t.classList.remove('active'));
+        tab.classList.add('active');
+        const labels = modelVariants[tab.dataset.model];
+        modelCards.forEach((card, i) => {
+          const header = card.querySelector('.mb-3');
+          if (header && labels[i]) header.textContent = labels[i];
+        });
+      });
+    });
+
+    const path = document.getElementById('heroChartPath');
+    if (path) {
+      const len = path.getTotalLength();
+      path.style.strokeDasharray = len;
+      path.style.strokeDashoffset = len;
+      const dot = document.getElementById('heroChartDot');
+      let progress = 0;
+      function animateLine() {
+        progress += 0.007;
+        if (progress > 1.15) progress = 0;
+        const current = Math.min(progress, 1);
+        path.style.strokeDashoffset = len * (1 - current);
+        const point = path.getPointAtLength(len * current);
+        if (dot) {
+          dot.setAttribute('cx', point.x);
+          dot.setAttribute('cy', point.y);
+        }
+        requestAnimationFrame(animateLine);
+      }
+      animateLine();
+    }
+  </script>
+</body>
+</html>
